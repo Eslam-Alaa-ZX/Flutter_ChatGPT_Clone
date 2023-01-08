@@ -29,10 +29,4 @@ Future<String> generateResponse(String prompt) async {
   return newResponse['choices'][0]['text'];
 }
 
-void scrollDown(ScrollController scrollController) {
-  scrollController.animateTo(
-    scrollController.position.maxScrollExtent,
-    duration: const Duration(milliseconds: 300),
-    curve: Curves.easeOut,
-  );
-}
+

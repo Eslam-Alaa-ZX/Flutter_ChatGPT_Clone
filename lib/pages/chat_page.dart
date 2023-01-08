@@ -82,7 +82,7 @@ class _ChatPageState extends State<ChatPage> {
                       var input = txtController.text;
                       txtController.clear();
                       Future.delayed(const Duration(milliseconds: 50))
-                          .then((_) => scrollDown(scrollController));
+                          .then((_) => scrollDown());
                       generateResponse(input).then((value) {
                         setState(() {
                           isLoading = false;
@@ -96,7 +96,7 @@ class _ChatPageState extends State<ChatPage> {
                       });
                       txtController.clear();
                       Future.delayed(const Duration(milliseconds: 50))
-                          .then((_) => scrollDown(scrollController));
+                          .then((_) => scrollDown());
                     },
                   ),
                 ),
@@ -105,6 +105,13 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ],
       ),
+    );
+  }
+  void scrollDown() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
     );
   }
 }

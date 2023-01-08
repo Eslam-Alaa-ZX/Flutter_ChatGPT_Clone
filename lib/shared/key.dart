@@ -1,1 +1,1 @@
-const String apiSecKey="";
+const String apiSecKey="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";
