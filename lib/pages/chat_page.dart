@@ -4,6 +4,9 @@ import 'package:flutter_chatgpt_clone/widgits/chat_list.dart';
 import 'package:flutter_chatgpt_clone/widgits/sms_text.dart';
 import 'package:flutter_chatgpt_clone/widgits/submit_btn.dart';
 
+import '../models/model.dart';
+import '../shared/functions.dart';
+
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
 
@@ -14,6 +17,8 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late bool isLoading;
   final TextEditingController txtController = TextEditingController();
+  final List<ChatMessageModel> messages = [];
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -41,8 +46,11 @@ class _ChatPageState extends State<ChatPage> {
       backgroundColor: backgroundColor,
       body: Column(
         children: [
-          const Expanded(
-            child: ChatList(),
+          Expanded(
+            child: ChatList(
+              messages: messages,
+              scrollController: scrollController,
+            ),
           ),
           Visibility(
             visible: isLoading,
@@ -60,7 +68,37 @@ class _ChatPageState extends State<ChatPage> {
                 SmsText(txtController: txtController),
                 Visibility(
                   visible: !isLoading,
-                  child: SubmitBtn(),
+                  child: SubmitBtn(
+                    onClick: () {
+                      setState(() {
+                        messages.add(
+                          ChatMessageModel(
+                            text: txtController.text,
+                            chatMessageType: ChatMessageType.user,
+                          ),
+                        );
+                        isLoading = true;
+                      });
+                      var input = txtController.text;
+                      txtController.clear();
+                      Future.delayed(const Duration(milliseconds: 50))
+                          .then((_) => scrollDown(scrollController));
+                      generateResponse(input).then((value) {
+                        setState(() {
+                          isLoading = false;
+                          messages.add(
+                            ChatMessageModel(
+                              text: value,
+                              chatMessageType: ChatMessageType.bot,
+                            ),
+                          );
+                        });
+                      });
+                      txtController.clear();
+                      Future.delayed(const Duration(milliseconds: 50))
+                          .then((_) => scrollDown(scrollController));
+                    },
+                  ),
                 ),
               ],
             ),
