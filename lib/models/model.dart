@@ -1,10 +1,10 @@
 enum ChatMessageType { user, bot }
 
-class ChatMessage {
+class ChatMessageModel {
   final String text;
   final ChatMessageType chatMessageType;
 
-  ChatMessage({
+  ChatMessageModel({
     required this.text,
     required this.chatMessageType,
   });
